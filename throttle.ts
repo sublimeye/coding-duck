@@ -1,9 +1,9 @@
 // the api
 // const debouncedScroll = debounce(onScroll, 500)
 
-function debounce(fn, delay) {
-  let timeout;
-  return (...args) => {
+function debounce(fn: (a: any) => any, delay: number) {
+  let timeout: number;
+  return (...args: any) => {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => {
       fn(...args);
