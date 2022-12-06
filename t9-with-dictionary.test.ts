@@ -1,12 +1,13 @@
 import { assertEquals } from "https://deno.land/std@0.165.0/testing/asserts.ts";
 import { describe, it } from "https://deno.land/std@0.166.0/testing/bdd.ts";
+import { TrieST } from "./ds/rwayTrie.test.ts";
 
 class Node<T> {
   next: Node<T>[] = [];
   value: T | void = undefined;
 }
-export class TrieST<T> {
-  R = 256; // in JS we don't care as arrays are dynamic
+export class Trie8Way<T> {
+  R = 8;
   root = new Node<T>();
   #get(root: Node<T>, key: string, d: number): void | Node<T> {
     if (!root) return;
@@ -73,57 +74,40 @@ export class TrieST<T> {
   }
 }
 
-describe("RWay Trie", () => {
-  it("basic operations", () => {
-    const t = new TrieST();
-    t.put("one", 10);
-    t.put("ono", 20);
-    t.put("onceupon", 500);
-    t.put("h", 50);
-    t.put("jamaica", 5);
-    assertEquals(t.get("one"), 10);
-    assertEquals(t.get("onceupon"), 500);
-    assertEquals(t.get("onceupo"), undefined);
-    assertEquals(t.has("h"), true);
-  });
-  it("keys", () => {
-    const t = new TrieST();
-    t.put("one", 10);
-    t.put("ono", 20);
-    t.put("onceupon", 500);
-    t.put("h", 50);
-    t.put("jamaica", 5);
-    assertEquals(t.keys(), ["h", "jamaica", "onceupon", "one", "ono"]);
-  });
+function main() {
+  // deno-fmt-ignore
+  const words = [ "a", "about", "all", "also", "and", "as", "at", "be", "because", "but", "by", "can", "come", "could", "day", "do", "even", "find", "first", "for", "from", "get", "give", "go", "have", "he", "her", "here", "him", "his", "how", "I", "if", "in", "into", "it", "its", "just", "know", "like", "look", "make", "man", "many", "me", "more", "my", "new", "no", "not", "now", "of", "on", "one", "only", "or", "other", "our", "out", "people", "say", "see", "she", "so", "some", "take", "tell", "than", "that", "the", "their", "them", "then", "there", "these", "they", "thing", "think", "this", "those", "time", "to", "two", "up", "use", "very", "want", "way", "we", "well", "what", "when", "which", "who", "will", "with", "would", "year", "you", "your", ];
+  const dict = new TrieST<number>();
+  for (const w of words) dict.put(w, 0);
+  const digits = {
+    "2": "abc",
+    "3": "def",
+    "4": "ghi",
+    "5": "jkl",
+    "6": "mno",
+    "7": "pqrs",
+    "8": "tuv",
+    "9": "wxyz",
+  };
+  const t9trie = new Trie8Way<Set<string>>();
+  // prefix
+  // '2'
+  // '23'
+  // '24'
+  // '25'
 
-  it("keysWithPrefix", () => {
-    const t = new TrieST();
-    t.put("can", 1);
-    t.put("cap", 2);
-    t.put("cannon", 1);
-    t.put("cam", 1);
-    assertEquals(t.keysWithPrefix("ca"), ["cam", "can", "cannon", "cap"]);
-    assertEquals(t.keysWithPrefix("cb"), []);
+  // incomplete
+  function generate(tree: void | Trie8Way<Set<string>>, prefix: string) {
+    if (!tree) return;
+    if (!prefix) return;
+  }
+  // for (let d = 1; d < 2; d++) {
+  // }
 
-    t.put("one", 10);
-    t.put("ono", 20);
-    t.put("onceupon", 500);
-    t.put("h", 50);
-    t.put("jamaica", 5);
-    assertEquals(t.keysWithPrefix("o"), ["onceupon", "one", "ono"]);
-  });
+  // create 8 way trie
+  // start building the trie
+  // for (digit-char-combinations: ['th', 'tg', ...]) => get values
+  // if digit-character has keys -> go one level deep // recursion
+}
 
-  it("keysWithLongestPrefix", () => {
-    const t = new TrieST();
-    t.put("120.10", 1);
-    t.put("120.10.14", 2);
-    t.put("120.10.14.1", 2);
-    t.put("120.10.14.2", 2);
-    t.put("120.10.14.3", 2);
-    t.put("120.10.14.4", 2);
-    assertEquals(t.longestPrefix("120.10.20"), "120.10");
-    assertEquals(t.longestPrefix("120.10.14"), "120.10.14");
-    assertEquals(t.longestPrefix("120.10.14.3"), "120.10.14.3");
-    assertEquals(t.longestPrefix("120.10.14.5"), "120.10.14");
-  });
-});
+main();
